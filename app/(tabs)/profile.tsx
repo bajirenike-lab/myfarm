@@ -23,6 +23,7 @@ import {
   Sparkles,
   Shovel,
   Smartphone,
+  Tractor,
 } from 'lucide-react-native';
 
 export default function ProfileScreen() {
@@ -149,6 +150,19 @@ export default function ProfileScreen() {
 
       {/* Account Settings Menu */}
       <View style={styles.menuCard}>
+        <TouchableOpacity
+          style={[styles.menuItem, { backgroundColor: '#F0FDF4' }]}
+          onPress={() => router.push('/')}
+        >
+          <View style={styles.menuItemLeft}>
+            <Tractor size={18} color="#15803d" />
+            <Text style={[styles.menuItemText, { fontWeight: '700', color: '#15803d' }]}>
+              📍 Main Gateway & Switch Route
+            </Text>
+          </View>
+          <ChevronRight size={18} color="#15803d" />
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.menuItem}
           onPress={() => router.push('/start-farm')}

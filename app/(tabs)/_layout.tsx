@@ -20,20 +20,21 @@ export default function TabLayout() {
           backgroundColor: Colors.surface,
           borderTopColor: Colors.borderLight,
           borderTopWidth: 1,
-          height: Platform.select({ ios: 88, default: 72 }),
-          paddingBottom: Platform.select({ ios: 28, default: 14 }),
+          height: Platform.select({ ios: 92, default: 84 }),
+          paddingBottom: Platform.select({ ios: 30, default: 22 }),
           paddingTop: 8,
           shadowColor: '#000',
           shadowOffset: { width: 0, height: -3 },
-          shadowOpacity: 0.06,
+          shadowOpacity: 0.08,
           shadowRadius: 6,
-          elevation: 10,
+          elevation: 12,
         },
         tabBarItemStyle: {
-          paddingBottom: 2,
+          justifyContent: 'center',
+          alignItems: 'center',
         },
         tabBarLabelStyle: {
-          fontSize: 11,
+          fontSize: 10.5,
           fontWeight: '700',
           marginTop: 2,
         },
@@ -53,7 +54,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           headerTitle: 'MyFarm Cockpit',
-          tabBarIcon: ({ color }) => <Home size={22} color={color} />,
+          tabBarIcon: ({ color }) => <Home size={20} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -61,7 +62,7 @@ export default function TabLayout() {
         options={{
           title: 'Discover',
           headerTitle: 'Farms & Crops',
-          tabBarIcon: ({ color }) => <Compass size={22} color={color} />,
+          tabBarIcon: ({ color }) => <Compass size={20} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -69,15 +70,15 @@ export default function TabLayout() {
         options={{
           title: 'My Farms',
           headerTitle: 'Active Cultivations',
-          tabBarIcon: ({ color }) => <Sprout size={22} color={color} />,
+          tabBarIcon: ({ color }) => <Sprout size={20} color={color} />,
         }}
       />
       <Tabs.Screen
         name="marketplace"
         options={{
-          title: 'Marketplace',
+          title: 'Market',
           headerTitle: 'Fresh Harvest Store',
-          tabBarIcon: ({ color }) => <ShoppingBag size={22} color={color} />,
+          tabBarIcon: ({ color }) => <ShoppingBag size={20} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -85,7 +86,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           headerTitle: 'My Account',
-          tabBarIcon: ({ color }) => <User size={22} color={color} />,
+          tabBarIcon: ({ color }) => <User size={20} color={color} />,
         }}
       />
     </Tabs>

@@ -175,8 +175,10 @@ export default function HomeScreen() {
     >
       {/* 1. Header Greeting & Location */}
       <View style={styles.header}>
-        <View>
-          <Text style={styles.greetingText}>Welcome, Urban Farmer</Text>
+        <View style={styles.headerGreetingCol}>
+          <Text style={styles.greetingText} numberOfLines={1}>
+            Welcome, Urban Farmer
+          </Text>
           <View style={styles.locationPill}>
             <MapPin size={12} color={Colors.primary} />
             <Text style={styles.locationText}>Ibadan, Oyo State</Text>
@@ -187,8 +189,9 @@ export default function HomeScreen() {
           <TouchableOpacity
             style={styles.notifIconButton}
             onPress={() => router.push('/notifications')}
+            accessibilityLabel="Notifications"
           >
-            <Bell size={20} color={Colors.primary} />
+            <Bell size={18} color={Colors.primary} />
             {unreadCount > 0 && (
               <View style={styles.unreadBadge}>
                 <Text style={styles.unreadBadgeText}>{unreadCount}</Text>
@@ -199,8 +202,10 @@ export default function HomeScreen() {
           <TouchableOpacity
             style={styles.calcButton}
             onPress={() => router.push('/calculator')}
+            activeOpacity={0.8}
+            accessibilityLabel="Production Estimator"
           >
-            <Calculator size={18} color={Colors.text.inverse} />
+            <Calculator size={15} color={Colors.text.inverse} />
             <Text style={styles.calcButtonText}>Estimator</Text>
           </TouchableOpacity>
         </View>
@@ -407,10 +412,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: Spacing.xs,
+    gap: Spacing.sm,
+    width: '100%',
+  },
+  headerGreetingCol: {
+    flex: 1,
+    minWidth: 0,
+    justifyContent: 'center',
   },
   greetingText: {
-    ...Typography.heading1,
+    fontSize: 20,
+    fontWeight: '800',
     color: Colors.text.primary,
+    letterSpacing: -0.4,
   },
   locationPill: {
     flexDirection: 'row',
@@ -421,16 +435,18 @@ const styles = StyleSheet.create({
   locationText: {
     ...Typography.captionBold,
     color: Colors.primary,
+    fontSize: 11,
   },
   headerRightActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: 8,
+    flexShrink: 0,
   },
   notifIconButton: {
     position: 'relative',
-    width: 38,
-    height: 38,
+    width: 36,
+    height: 36,
     borderRadius: BorderRadius.full,
     backgroundColor: Colors.surface,
     borderWidth: 1,
@@ -444,28 +460,29 @@ const styles = StyleSheet.create({
     right: -2,
     backgroundColor: Colors.status.error,
     borderRadius: 9,
-    minWidth: 18,
-    height: 18,
+    minWidth: 16,
+    height: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 4,
+    paddingHorizontal: 3,
   },
   unreadBadgeText: {
     color: Colors.surface,
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '800',
   },
   calcButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 5,
     backgroundColor: Colors.primary,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingHorizontal: 10,
+    height: 36,
     borderRadius: BorderRadius.full,
   },
   calcButtonText: {
-    ...Typography.captionBold,
+    fontSize: 12,
+    fontWeight: '700',
     color: Colors.text.inverse,
   },
   weatherCard: {

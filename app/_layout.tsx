@@ -1,10 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Colors } from '@/constants/theme';
+import { Platform } from 'react-native';
 
 export default function RootLayout() {
+  useEffect(() => {
+    if (Platform.OS === 'web' && typeof document !== 'undefined') {
+      const styleId = 'myfarm-web-responsive-viewport';
+      if (!document.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.innerHTML = `
+          /* Mobile Web Viewport & Safe Area Optimization */
+          html, body {
+            height: 100% !important;
+            height: 100dvh !important;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+          }
+          #root {
+            display: flex;
+            height: 100% !important;
+            height: 100dvh !important;
+            max-height: 100dvh !important;
+          }
+          /* Ensure footer navigation buttons and text are elevated and visible */
+          [role="tablist"] {
+            padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)) !important;
+            box-sizing: border-box !important;
+          }
+          [role="tab"] {
+            overflow: visible !important;
+          }
+          [role="tab"] * {
+            overflow: visible !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  }, []);
+
   return (
     <SafeAreaProvider>
       <StatusBar style="light" backgroundColor={Colors.primary} />

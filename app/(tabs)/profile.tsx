@@ -151,15 +151,41 @@ export default function ProfileScreen() {
       <View style={styles.menuCard}>
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => router.push('/farmer-log')}
+          onPress={() => router.push('/start-farm')}
         >
           <View style={styles.menuItemLeft}>
-            <Shovel size={18} color={Colors.primary} />
+            <Sprout size={18} color={Colors.primary} />
             <Text style={[styles.menuItemText, { fontWeight: '700', color: Colors.primary }]}>
-              🚜 Farmer Field Operator Mode
+              🌱 Own a Farm (Hire a Farmer)
             </Text>
           </View>
           <ChevronRight size={18} color={Colors.primary} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push('/farmer-onboarding')}
+        >
+          <View style={styles.menuItemLeft}>
+            <Shovel size={18} color={Colors.primary} />
+            <Text style={styles.menuItemText}>
+              🌾 Join as a Partner Farmer
+            </Text>
+          </View>
+          <ChevronRight size={18} color={Colors.text.muted} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push('/farmer-log')}
+        >
+          <View style={styles.menuItemLeft}>
+            <Smartphone size={18} color={Colors.primary} />
+            <Text style={styles.menuItemText}>
+              📱 Farmer Field App (Offline PWA)
+            </Text>
+          </View>
+          <ChevronRight size={18} color={Colors.text.muted} />
         </TouchableOpacity>
 
         <TouchableOpacity

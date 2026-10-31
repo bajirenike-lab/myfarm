@@ -16,6 +16,7 @@ import { supabase } from '@/lib/supabase';
 import { MarketplaceListing } from '@/types';
 import { IBADAN_DELIVERY_ZONES, DeliveryZone } from '@/constants/delivery';
 import { NotificationService } from '@/services/notification';
+import { userMode } from '@/services/userMode';
 import {
   Search,
   ShoppingBag,
@@ -281,6 +282,24 @@ export default function MarketplaceScreen() {
 
       {/* Produce Grid */}
       <ScrollView contentContainerStyle={styles.listContent}>
+        {/* Mode Switcher Bar */}
+        <View style={styles.modeBar}>
+          <View style={styles.modePillActive}>
+            <Text style={{ fontSize: 13 }}>🛒</Text>
+            <Text style={styles.modeActiveText}>Food Store</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.switchModeBtn}
+            onPress={() => {
+              userMode.setIntent('farm_owner');
+              router.push('/start-farm');
+            }}
+          >
+            <Text style={{ fontSize: 13 }}>🚜</Text>
+            <Text style={styles.switchModeText}>Want to Own a Farm? →</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.bannerBox}>
           <Text style={styles.bannerTitle}>Direct From Ibadan Farms</Text>
           <Text style={styles.bannerSubtitle}>
@@ -499,6 +518,41 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     gap: Spacing.md,
     paddingBottom: 100,
+  },
+  modeBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: Colors.surface,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 8,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  modePillActive: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.primaryFaint,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.full,
+  },
+  modeActiveText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: Colors.primary,
+  },
+  switchModeBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  switchModeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.primary,
   },
   bannerBox: {
     backgroundColor: Colors.primaryFaint,

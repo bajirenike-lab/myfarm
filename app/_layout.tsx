@@ -91,6 +91,14 @@ export default function RootLayout() {
           options={{ title: 'Farm Progress Timeline', presentation: 'card' }}
         />
         <Stack.Screen
+          name="start-farm"
+          options={{ title: 'Own a Farm in Ibadan', presentation: 'card' }}
+        />
+        <Stack.Screen
+          name="farmer-onboarding"
+          options={{ title: 'Partner Farmer Registration', presentation: 'card' }}
+        />
+        <Stack.Screen
           name="harvest/[id]"
           options={{ title: 'Harvest Decision', presentation: 'card' }}
         />

@@ -7,11 +7,20 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
-import { Mail, Lock, ArrowRight, ShieldCheck } from 'lucide-react-native';
+import { userMode } from '@/services/userMode';
+import {
+  Mail,
+  Lock,
+  ArrowRight,
+  ShieldCheck,
+  ShoppingBag,
+  Tractor,
+} from 'lucide-react-native';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -26,7 +35,7 @@ export default function LoginScreen() {
     }
 
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -35,21 +44,35 @@ export default function LoginScreen() {
     if (error) {
       Alert.alert('Sign In Failed', error.message);
     } else {
-      router.replace('/(tabs)');
+      const role = data.user?.user_metadata?.role;
+      if (role === 'food_buyer') {
+        userMode.setIntent('food_buyer');
+        router.replace('/(tabs)/marketplace');
+      } else if (role === 'farmer') {
+        router.replace('/farmer-log');
+      } else {
+        userMode.setIntent('farm_owner');
+        router.replace('/(tabs)');
+      }
     }
   };
 
-  const handleDemoSignIn = async () => {
-    // Quick demo login bypass for fast developer & founder validation
+  const handleExploreFarmOwner = () => {
+    userMode.setIntent('farm_owner');
     router.replace('/(tabs)');
   };
 
+  const handleExploreFoodBuyer = () => {
+    userMode.setIntent('food_buyer');
+    router.replace('/(tabs)/marketplace');
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <Text style={styles.title}>Welcome to MyFarm</Text>
+        <Text style={styles.title}>Welcome Back</Text>
         <Text style={styles.subtitle}>
-          Sign in to monitor your agricultural production units.
+          Sign in to check your farm or shop fresh food in Ibadan.
         </Text>
       </View>
 
@@ -89,6 +112,7 @@ export default function LoginScreen() {
           style={styles.loginButton}
           onPress={handleLogin}
           disabled={loading}
+          activeOpacity={0.85}
         >
           {loading ? (
             <ActivityIndicator color={Colors.text.inverse} />
@@ -100,18 +124,49 @@ export default function LoginScreen() {
           )}
         </TouchableOpacity>
 
+        {/* Quick Demo Exploration Options */}
         <View style={styles.divider}>
           <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>or explore instantly</Text>
+          <Text style={styles.dividerText}>or test freely right now</Text>
           <View style={styles.dividerLine} />
         </View>
 
+        <View style={styles.demoButtonsRow}>
+          <TouchableOpacity
+            style={styles.demoCard}
+            onPress={handleExploreFarmOwner}
+            activeOpacity={0.8}
+          >
+            <Text style={{ fontSize: 20 }}>🚜</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.demoTitle}>Explore as Farm Owner</Text>
+              <Text style={styles.demoSub}>Hire a farmer, track crops & profit</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.demoCard}
+            onPress={handleExploreFoodBuyer}
+            activeOpacity={0.8}
+          >
+            <Text style={{ fontSize: 20 }}>🛒</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.demoTitle}>Explore as Food Buyer</Text>
+              <Text style={styles.demoSub}>Shop fresh produce with delivery</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* Farmer Application Callout */}
         <TouchableOpacity
-          style={styles.demoButton}
-          onPress={handleDemoSignIn}
+          style={styles.farmerCallout}
+          onPress={() => router.push('/farmer-onboarding')}
         >
-          <ShieldCheck size={18} color={Colors.primary} />
-          <Text style={styles.demoButtonText}>Explore as Demo Participant</Text>
+          <Tractor size={18} color={Colors.primary} />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.farmerCalloutTitle}>Are you a local farmer in Oyo State?</Text>
+            <Text style={styles.farmerCalloutSub}>Register your land & get hired by city farm owners →</Text>
+          </View>
         </TouchableOpacity>
 
         <View style={styles.footerLink}>
@@ -121,7 +176,7 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -129,45 +184,56 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingHorizontal: Spacing.lg,
+  },
+  content: {
+    paddingHorizontal: Spacing.md,
     paddingTop: Spacing.xl,
+    paddingBottom: Spacing.xxl,
+    gap: Spacing.lg,
   },
   header: {
-    marginBottom: Spacing.xl,
+    gap: 4,
   },
   title: {
-    ...Typography.heading1,
+    fontSize: 24,
+    fontWeight: '800',
     color: Colors.text.primary,
-    marginBottom: Spacing.xs,
   },
   subtitle: {
-    ...Typography.body,
+    fontSize: 13,
     color: Colors.text.secondary,
+    lineHeight: 18,
   },
   form: {
+    backgroundColor: Colors.surface,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.xl,
+    borderWidth: 1,
+    borderColor: Colors.border,
     gap: Spacing.md,
   },
   inputGroup: {
-    gap: Spacing.xs,
+    gap: 6,
   },
   label: {
-    ...Typography.captionBold,
+    fontSize: 12,
+    fontWeight: '700',
     color: Colors.text.secondary,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.background,
     borderWidth: 1,
     borderColor: Colors.border,
     borderRadius: BorderRadius.md,
     paddingHorizontal: Spacing.md,
     gap: Spacing.sm,
-    height: 50,
+    height: 48,
   },
   input: {
     flex: 1,
-    ...Typography.body,
+    fontSize: 14,
     color: Colors.text.primary,
   },
   loginButton: {
@@ -178,16 +244,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: Spacing.sm,
-    marginTop: Spacing.sm,
+    marginTop: Spacing.xs,
   },
   loginButtonText: {
-    ...Typography.bodyBold,
+    fontSize: 14,
+    fontWeight: '700',
     color: Colors.text.inverse,
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: Spacing.sm,
+    marginVertical: Spacing.xs,
     gap: Spacing.sm,
   },
   dividerLine: {
@@ -196,35 +263,64 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.border,
   },
   dividerText: {
-    ...Typography.caption,
+    fontSize: 11,
     color: Colors.text.muted,
   },
-  demoButton: {
-    backgroundColor: Colors.primaryFaint,
-    borderWidth: 1,
-    borderColor: Colors.primaryLight,
-    height: 50,
-    borderRadius: BorderRadius.md,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+  demoButtonsRow: {
     gap: Spacing.sm,
   },
-  demoButtonText: {
-    ...Typography.bodyBold,
+  demoCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    backgroundColor: Colors.surfaceSubtle,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    padding: Spacing.sm + 2,
+    borderRadius: BorderRadius.lg,
+  },
+  demoTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: Colors.text.primary,
+  },
+  demoSub: {
+    fontSize: 11,
+    color: Colors.text.secondary,
+  },
+  farmerCallout: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    backgroundColor: Colors.primaryFaint,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
+    marginTop: Spacing.xs,
+  },
+  farmerCalloutTitle: {
+    fontSize: 12,
+    fontWeight: '700',
     color: Colors.primary,
+  },
+  farmerCalloutSub: {
+    fontSize: 11,
+    color: Colors.text.secondary,
   },
   footerLink: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: Spacing.lg,
+    alignItems: 'center',
+    marginTop: Spacing.xs,
   },
   footerText: {
-    ...Typography.body,
-    color: Colors.text.secondary,
+    fontSize: 13,
+    color: Colors.text.muted,
   },
   signupText: {
-    ...Typography.bodyBold,
+    fontSize: 13,
+    fontWeight: '700',
     color: Colors.primary,
   },
 });

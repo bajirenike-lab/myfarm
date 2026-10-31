@@ -27,7 +27,10 @@ import {
   Calendar,
   Sparkles,
   Bell,
+  ShoppingBag,
+  Tractor,
 } from 'lucide-react-native';
+import { userMode } from '@/services/userMode';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -211,6 +214,24 @@ export default function HomeScreen() {
         </View>
       </View>
 
+      {/* Mode Switcher Bar */}
+      <View style={styles.modeBar}>
+        <View style={styles.modePillActive}>
+          <Text style={{ fontSize: 13 }}>🚜</Text>
+          <Text style={styles.modeActiveText}>Farm Owner Mode</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.switchModeBtn}
+          onPress={() => {
+            userMode.setIntent('food_buyer');
+            router.push('/(tabs)/marketplace');
+          }}
+        >
+          <ShoppingBag size={13} color={Colors.primary} />
+          <Text style={styles.switchModeText}>Shop Fresh Food →</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* 2. Live Agricultural Weather Widget */}
       {weather && (
         <View style={styles.weatherCard}>
@@ -238,24 +259,23 @@ export default function HomeScreen() {
         </View>
       )}
 
-      {/* 3. Hero CTA: Start Your Farm */}
+      {/* 3. Hero CTA: Own a Farm (Hire a Farmer) */}
       <View style={styles.heroCard}>
         <View style={styles.heroContent}>
           <View style={styles.heroTag}>
             <Sparkles size={12} color={Colors.accent} />
-            <Text style={styles.heroTagText}>NEW SEASON OPEN</Text>
+            <Text style={styles.heroTagText}>HIRE A FARMER IN IBADAN</Text>
           </View>
-          <Text style={styles.heroTitle}>Grow Fresh Food in Ibadan</Text>
+          <Text style={styles.heroTitle}>Own a Farm in Ibadan</Text>
           <Text style={styles.heroSubtitle}>
-            Select a verified plot, fund certified inputs, and watch real farmers
-            cultivate your harvest.
+            Hire a verified local farmer to manage your farm and plant for you. Keep your harvest or sell it for profit.
           </Text>
 
           <TouchableOpacity
             style={styles.heroButton}
-            onPress={() => router.push('/(tabs)/discover')}
+            onPress={() => router.push('/start-farm')}
           >
-            <Text style={styles.heroButtonText}>Start Your Farm</Text>
+            <Text style={styles.heroButtonText}>Start a Farm Plot Now</Text>
             <ArrowRight size={18} color={Colors.text.inverse} />
           </TouchableOpacity>
         </View>
@@ -384,7 +404,22 @@ export default function HomeScreen() {
         ))}
       </View>
 
-      {/* 7. Responsible Agriculture Disclaimer */}
+      {/* 7. Partner Farmer Onboarding Banner */}
+      <TouchableOpacity
+        style={styles.farmerOnboardingBanner}
+        onPress={() => router.push('/farmer-onboarding')}
+        activeOpacity={0.85}
+      >
+        <Tractor size={24} color={Colors.primary} />
+        <View style={{ flex: 1 }}>
+          <Text style={styles.farmerOnboardingTitle}>Are you a local farmer in Oyo State?</Text>
+          <Text style={styles.farmerOnboardingSub}>
+            Register your farmland in Ido or Akinyele to get hired by city farm owners. Guaranteed funding & fair pay →
+          </Text>
+        </View>
+      </TouchableOpacity>
+
+      {/* 8. Responsible Agriculture Disclaimer */}
       <View style={styles.disclaimerBox}>
         <Text style={styles.disclaimerTitle}>Real Agriculture Disclaimer</Text>
         <Text style={styles.disclaimerText}>
@@ -484,6 +519,62 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: Colors.text.inverse,
+  },
+  modeBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: Colors.surface,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 8,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  modePillActive: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: Colors.primaryFaint,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.full,
+  },
+  modeActiveText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: Colors.primary,
+  },
+  switchModeBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  switchModeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.primary,
+  },
+  farmerOnboardingBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    backgroundColor: Colors.primaryFaint,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.xl,
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
+  },
+  farmerOnboardingTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: Colors.primary,
+    marginBottom: 2,
+  },
+  farmerOnboardingSub: {
+    fontSize: 11,
+    color: Colors.text.secondary,
+    lineHeight: 16,
   },
   weatherCard: {
     backgroundColor: Colors.surface,

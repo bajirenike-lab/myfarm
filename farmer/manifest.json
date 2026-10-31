@@ -1,0 +1,18 @@
+{
+  "name": "MyFarm Field Operator Portal",
+  "short_name": "MyFarm Field",
+  "description": "Offline-first agricultural field operations and verification portal for Ido and Akinyele farm hubs.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#133E2B",
+  "theme_color": "#133E2B",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

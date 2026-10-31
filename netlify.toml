@@ -1,0 +1,41 @@
+# ==============================================================================
+# MYFARM NIGERIA - NETLIFY DEPLOYMENT CONFIGURATION
+# ==============================================================================
+
+[build]
+  command = "npx expo export --platform web"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Route Farmer Field PWA
+[[redirects]]
+  from = "/farmer/*"
+  to = "/farmer/:splat"
+  status = 200
+
+# Route Operations Admin Portal
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/:splat"
+  status = 200
+
+# Single Page App routing for Expo Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security Headers & PWA Caching
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"

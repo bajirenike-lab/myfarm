@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyFarm — Central Administration & Operations Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+  <!-- Navigation Bar -->
+  <header class="bg-[#133E2B] text-white px-6 py-4 flex items-center justify-between shadow-md">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">
+        🌱
+      </div>
+      <div>
+        <h1 class="text-xl font-bold tracking-tight">MyFarm Admin Portal</h1>
+        <p class="text-xs text-emerald-200/80">Operations Hub • Ibadan & Oyo State</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <a href="../farmer/index.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-emerald-600/40 hover:bg-emerald-600/60 border border-emerald-400/40 text-xs font-bold text-emerald-200 flex items-center space-x-1.5 transition">
+        <span>🚜 Open Farmer Portal</span>
+        <span class="text-[10px]">↗</span>
+      </a>
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-900/60 text-emerald-300 border border-emerald-500/30">
+        ● Live Supabase DB
+      </span>
+      <div class="text-right hidden sm:block">
+        <p class="text-sm font-semibold">Founder / Admin</p>
+        <p class="text-xs text-emerald-200/60">admin@myfarm.ng</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-8">
+
+    <!-- KPI Summary Row -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Registered Farms</p>
+        <p class="text-3xl font-extrabold text-[#133E2B] mt-2" id="kpi-farms">2</p>
+        <p class="text-xs text-slate-500 mt-1">Ido & Akinyele LGAs</p>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Crops In Catalog</p>
+        <p class="text-3xl font-extrabold text-[#133E2B] mt-2" id="kpi-crops">4</p>
+        <p class="text-xs text-slate-500 mt-1">Tomato, Pepper, Corn, Cassava</p>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Cultivations</p>
+        <p class="text-3xl font-extrabold text-amber-600 mt-2" id="kpi-cycles">1</p>
+        <p class="text-xs text-slate-500 mt-1">160–220 kg est. harvest</p>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Platform Revenue</p>
+        <p class="text-3xl font-extrabold text-emerald-700 mt-2" id="kpi-revenue">₦65,000</p>
+        <p class="text-xs text-slate-500 mt-1">100% Verified in Sandbox</p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="border-b border-slate-200 flex space-x-8">
+      <button onclick="switchTab('approvals')" id="tab-btn-approvals" class="pb-3 text-sm font-bold border-b-2 border-[#133E2B] text-[#133E2B]">
+        Activity Approvals Queue <span id="queue-badge" class="ml-2 px-2 py-0.5 text-xs bg-amber-100 text-amber-800 rounded-full font-bold">1</span>
+      </button>
+      <button onclick="switchTab('farms')" id="tab-btn-farms" class="pb-3 text-sm font-semibold text-slate-500 hover:text-slate-800">
+        Partner Farms
+      </button>
+      <button onclick="switchTab('crops')" id="tab-btn-crops" class="pb-3 text-sm font-semibold text-slate-500 hover:text-slate-800">
+        Crops & Packages
+      </button>
+      <button onclick="switchTab('marketplace')" id="tab-btn-marketplace" class="pb-3 text-sm font-semibold text-slate-500 hover:text-slate-800">
+        Marketplace Listings
+      </button>
+    </div>
+
+    <!-- TAB 1: Activity Approvals Queue -->
+    <div id="tab-approvals" class="space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Farmer Field Activity Submissions</h2>
+            <p class="text-sm text-slate-500">Review photographs, notes, and inputs applied before making them visible to participants.</p>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-full">
+            Review Gate Active
+          </span>
+        </div>
+
+        <div id="approvals-container" class="space-y-4">
+          <!-- Pending Card 1 -->
+          <div id="card-act-1" class="border border-slate-200 rounded-xl p-5 flex flex-col md:flex-row gap-5 items-start bg-slate-50/50">
+            <img src="https://images.unsplash.com/photo-1592417817098-8f3d6910985c?auto=format&fit=crop&w=400&q=80" alt="Activity proof" class="w-full md:w-48 h-36 object-cover rounded-lg border border-slate-200 shadow-sm" />
+            <div class="flex-1 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">Stage 3: Vegetative Growth</span>
+                <span class="text-xs text-slate-400">Submitted Today, 14:30</span>
+              </div>
+              <h3 class="font-bold text-slate-900 text-base">Foliar Bio-Protection & Weeding Completed</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                "Completed second manual bed weeding across Plot IDO-BLK-A01. Sprayed organic cold-pressed neem oil bio-formulation (250ml) to suppress whiteflies and early blight. Drip lines inspected."
+              </p>
+              <div class="text-xs text-slate-500 flex flex-wrap gap-4 pt-1">
+                <span><strong>Operator:</strong> Adebayo Ogunlesi</span>
+                <span><strong>Plot:</strong> IDO-BLK-A01 (50 sqm)</span>
+                <span><strong>GPS:</strong> 7.4589° N, 3.7654° E</span>
+                <span><strong>Crop:</strong> Roma Tomato</span>
+              </div>
+              <div class="pt-3 flex space-x-3">
+                <button onclick="approveActivity('card-act-1')" class="px-4 py-2 bg-[#133E2B] text-white text-xs font-bold rounded-lg hover:bg-[#1a523a] transition shadow-sm">
+                  ✓ Approve & Publish to Mobile App
+                </button>
+                <button onclick="rejectActivity('card-act-1')" class="px-4 py-2 bg-white text-slate-600 border border-slate-200 text-xs font-bold rounded-lg hover:bg-slate-50 transition">
+                  Request Revision
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Partner Farms -->
+    <div id="tab-farms" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Partner Farms in Oyo State</h2>
+            <p class="text-sm text-slate-500">Verified agricultural hubs supporting urban participant production units.</p>
+          </div>
+          <button onclick="alert('Farm onboarding form: Add name, LGA, GPS, and plot inventory.')" class="px-4 py-2 bg-[#133E2B] text-white text-xs font-bold rounded-lg">
+            + Onboard New Farm
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="farms-grid">
+          <!-- Farm 1 -->
+          <div class="border border-slate-200 rounded-xl p-5 space-y-3 bg-white">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-bold text-slate-900 text-base">Ido Agro Precision Farm</h3>
+                <p class="text-xs text-slate-500">Ido LGA, Ibadan • 25,000 sqm</p>
+              </div>
+              <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Verified</span>
+            </div>
+            <p class="text-xs text-slate-600">Solar-powered drip irrigation, sandy loam soil, resident horticulturist.</p>
+            <div class="text-xs text-slate-500 pt-2 border-t border-slate-100 flex justify-between">
+              <span>Available Capacity: <strong>18,500 sqm</strong></span>
+              <span>Allocated Plots: <strong>3</strong></span>
+            </div>
+          </div>
+          <!-- Farm 2 -->
+          <div class="border border-slate-200 rounded-xl p-5 space-y-3 bg-white">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-bold text-slate-900 text-base">Akinyele Organic Agri-Hub</h3>
+                <p class="text-xs text-slate-500">Akinyele LGA, Ibadan • 40,000 sqm</p>
+              </div>
+              <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Verified</span>
+            </div>
+            <p class="text-xs text-slate-600">Deep well irrigation, organic certification in progress, loamy clay.</p>
+            <div class="text-xs text-slate-500 pt-2 border-t border-slate-100 flex justify-between">
+              <span>Available Capacity: <strong>32,000 sqm</strong></span>
+              <span>Allocated Plots: <strong>2</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Crops & Packages -->
+    <div id="tab-crops" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+        <h2 class="text-lg font-bold text-slate-900">Crop Production Packages & Costs</h2>
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-slate-200 text-xs font-bold text-slate-400 uppercase">
+              <th class="py-3 px-4">Crop</th>
+              <th class="py-3 px-4">Duration</th>
+              <th class="py-3 px-4">Starter (50 sqm)</th>
+              <th class="py-3 px-4">Family (100 sqm)</th>
+              <th class="py-3 px-4">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="py-3 px-4 font-semibold text-slate-900">Roma Tomatoes (F1 Hybrid)</td>
+              <td class="py-3 px-4 text-slate-600">75 Days</td>
+              <td class="py-3 px-4 text-slate-900 font-bold">₦65,000</td>
+              <td class="py-3 px-4 text-slate-900 font-bold">₦118,000</td>
+              <td class="py-3 px-4"><span class="text-xs font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">In Season</span></td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-slate-900">Habanero Pepper (Atarodo)</td>
+              <td class="py-3 px-4 text-slate-600">90 Days</td>
+              <td class="py-3 px-4 text-slate-900 font-bold">₦58,000</td>
+              <td class="py-3 px-4 text-slate-900 font-bold">₦105,000</td>
+              <td class="py-3 px-4"><span class="text-xs font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">In Season</span></td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-slate-900">Sweet Corn (Hybrid Maize)</td>
+              <td class="py-3 px-4 text-slate-600">70 Days</td>
+              <td class="py-3 px-4 text-slate-900 font-bold">₦50,000</td>
+              <td class="py-3 px-4 text-slate-900 font-bold">₦95,000</td>
+              <td class="py-3 px-4"><span class="text-xs font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">In Season</span></td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-slate-900">Improved Cassava (TME 419)</td>
+              <td class="py-3 px-4 text-slate-600">270 Days</td>
+              <td class="py-3 px-4 text-slate-900 font-bold">₦40,000</td>
+              <td class="py-3 px-4 text-slate-900 font-bold">₦75,000</td>
+              <td class="py-3 px-4"><span class="text-xs font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">In Season</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: Marketplace & Doorstep Dispatch -->
+    <div id="tab-marketplace" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+        <h2 class="text-lg font-bold text-slate-900">Produce Available for Urban Delivery</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div class="border border-slate-200 rounded-xl p-4 space-y-2">
+            <p class="text-xs font-bold text-slate-400 uppercase">Roma Tomatoes</p>
+            <p class="text-xl font-bold text-slate-900">145 kg available</p>
+            <p class="text-sm font-semibold text-emerald-700">₦850 / kg</p>
+            <p class="text-xs text-slate-500">Origin: Ido Agro Precision Farm</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-4 space-y-2">
+            <p class="text-xs font-bold text-slate-400 uppercase">Habanero Pepper</p>
+            <p class="text-xl font-bold text-slate-900">78 kg available</p>
+            <p class="text-sm font-semibold text-emerald-700">₦1,400 / kg</p>
+            <p class="text-xs text-slate-500">Origin: Akinyele Organic Agri-Hub</p>
+          </div>
+          <div class="border border-slate-200 rounded-xl p-4 space-y-2">
+            <p class="text-xs font-bold text-slate-400 uppercase">Sweet Corn Cobs</p>
+            <p class="text-xl font-bold text-slate-900">210 kg available</p>
+            <p class="text-sm font-semibold text-emerald-700">₦500 / kg</p>
+            <p class="text-xs text-slate-500">Origin: Ido LGA</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Ibadan Doorstep Dispatch Queue -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Ibadan Doorstep Dispatch Operations</h2>
+            <p class="text-sm text-slate-500">Manage orders packing at the farm, rider assignments, and doorstep handovers.</p>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">
+            Logistics Active
+          </span>
+        </div>
+
+        <div class="space-y-3" id="dispatch-orders-list">
+          <!-- Order Card 1 -->
+          <div id="dispatch-order-1" class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center space-x-2">
+                <span class="font-mono text-xs font-extrabold text-[#133E2B]">MYF-MKT-2026-0891</span>
+                <span id="dispatch-status-badge-1" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Ready for Dispatch</span>
+              </div>
+              <p class="text-sm font-bold text-slate-900">5kg Roma Tomatoes + 2kg Habanero Pepper</p>
+              <p class="text-xs text-slate-600">Recipient: <strong>Babatunde Adeleke</strong> (+234 802 345 6789)</p>
+              <p class="text-xs text-slate-500">Destination: 14 Oluyole Way, Bodija • <strong>Zone 2 (Bodija / UI)</strong></p>
+            </div>
+            <div class="text-right space-y-2">
+              <p class="text-base font-extrabold text-[#133E2B]">₦9,250</p>
+              <div class="flex space-x-2">
+                <button onclick="dispatchRider('dispatch-order-1', 'dispatch-status-badge-1')" class="px-3.5 py-1.5 bg-[#133E2B] text-white text-xs font-bold rounded-lg hover:bg-[#1a523a] transition shadow-sm">
+                  🛵 Assign Kehinde (Rider)
+                </button>
+                <button onclick="confirmDelivered('dispatch-order-1', 'dispatch-status-badge-1')" class="px-3.5 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700 transition shadow-sm">
+                  ✓ Mark Delivered
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Action Toast -->
+  <div id="admin-toast" class="fixed bottom-6 right-6 bg-[#133E2B] text-white text-xs font-bold py-3.5 px-6 rounded-2xl shadow-2xl opacity-0 pointer-events-none transition-all duration-300 border border-emerald-400/30">
+    Notification
+  </div>
+
+  <!-- Automated SMS & WhatsApp Dispatched Modal -->
+  <div id="notif-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-5 border border-slate-200">
+      <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+            Automated Alert Dispatched
+          </span>
+          <h3 id="modal-notif-title" class="text-base font-bold text-slate-900 mt-1">Notification Sent</h3>
+          <p id="modal-notif-sub" class="text-xs text-slate-500">Sent via Nigerian SMS (Termii) & WhatsApp</p>
+        </div>
+        <button onclick="closeNotifModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold p-1">×</button>
+      </div>
+
+      <!-- Recipient Pill -->
+      <div class="bg-slate-50 rounded-xl p-3 flex justify-between items-center text-xs">
+        <div>
+          <span class="text-slate-400 block text-[10px] uppercase font-bold">Recipient:</span>
+          <strong id="modal-recipient-name" class="text-slate-900">Babatunde Adeleke</strong>
+        </div>
+        <div class="text-right">
+          <span class="text-slate-400 block text-[10px] uppercase font-bold">Phone:</span>
+          <strong id="modal-recipient-phone" class="font-mono text-emerald-700">+234 802 345 6789</strong>
+        </div>
+      </div>
+
+      <!-- WhatsApp Preview -->
+      <div class="space-y-1.5">
+        <div class="flex items-center space-x-1.5 text-xs font-bold text-emerald-700">
+          <span>💬 WhatsApp Format</span>
+        </div>
+        <div id="modal-wa-body" class="bg-emerald-50/70 border border-emerald-200 text-[#14532d] text-xs p-3.5 rounded-xl whitespace-pre-line leading-relaxed font-sans">
+          WhatsApp copy...
+        </div>
+      </div>
+
+      <!-- SMS Preview -->
+      <div class="space-y-1.5">
+        <div class="flex items-center space-x-1.5 text-xs font-bold text-sky-700">
+          <span>✉️ Carrier SMS Copy</span>
+        </div>
+        <div id="modal-sms-body" class="bg-slate-50 border border-slate-200 text-slate-800 text-xs p-3 rounded-xl font-mono leading-relaxed">
+          SMS copy...
+        </div>
+      </div>
+
+      <button onclick="closeNotifModal()" class="w-full py-2.5 bg-[#133E2B] text-white text-xs font-bold rounded-xl hover:bg-[#1a523a] transition shadow-sm">
+        Done / Continue Operations
+      </button>
+    </div>
+  </div>
+
+  <footer class="mt-auto border-t border-slate-200 py-6 text-center text-xs text-slate-400">
+    MyFarm Agricultural Technology Platform • Built for Ibadan, Oyo State, Nigeria
+  </footer>
+
+  <script>
+    const SUPABASE_URL = "https://kmrpzqxkpuedgtuntcyg.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttcnB6cXhrcHVlZGd0dW50Y3lnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzNzk0MjEsImV4cCI6MjEwODk1NTQyMX0.EHWK4bm_UBLuyDvI8P8dn1EjJ3mbkSUmPl8BmngxeO4";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Load Live DB Stats
+    async function loadStats() {
+      try {
+        const { data: farms } = await supabase.from('farms').select('id');
+        if (farms && farms.length) document.getElementById('kpi-farms').innerText = farms.length;
+
+        const { data: crops } = await supabase.from('crops').select('id');
+        if (crops && crops.length) document.getElementById('kpi-crops').innerText = crops.length;
+      } catch (e) {
+        console.warn('DB load note:', e);
+      }
+    }
+    loadStats();
+
+    function switchTab(tabName) {
+      ['approvals', 'farms', 'crops', 'marketplace'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+        document.getElementById('tab-btn-' + t).className = 'pb-3 text-sm font-semibold text-slate-500 hover:text-slate-800';
+      });
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      document.getElementById('tab-btn-' + tabName).className = 'pb-3 text-sm font-bold border-b-2 border-[#133E2B] text-[#133E2B]';
+    }
+
+    function showNotificationModal(title, recipient, phone, type, smsText, whatsAppText) {
+      document.getElementById('modal-notif-title').innerText = title;
+      document.getElementById('modal-recipient-name').innerText = recipient;
+      document.getElementById('modal-recipient-phone').innerText = phone;
+      document.getElementById('modal-sms-body').innerText = smsText;
+      document.getElementById('modal-wa-body').innerText = whatsAppText;
+      document.getElementById('notif-modal').classList.remove('hidden');
+    }
+
+    function closeNotifModal() {
+      document.getElementById('notif-modal').classList.add('hidden');
+    }
+
+    function approveActivity(cardId) {
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.style.transition = "all 0.4s ease";
+        card.style.opacity = "0.4";
+        card.style.transform = "scale(0.98)";
+
+        const sms = "[MyFarm] Milestone Verified! Bed preparation and drip line setup for your Roma Tomatoes at Ido Agro Precision Farm has been approved by our agronomist.";
+        const wa = "🌾 *MyFarm Field Verification* ✅\n\nA new cultivation milestone was verified for your *Roma Tomatoes* plot!\n\n📍 *Farm:* Ido Agro Precision Farm\n📌 *Milestone:* Raised seed beds and drip emitters verified\n🛡️ *Status:* Agronomist Approved (GPS & Time-stamped)\n\nOpen your MyFarm Cockpit to view high-res field photos!";
+
+        showNotificationModal(
+          "Milestone Verified & Alert Dispatched",
+          "Babatunde Adeleke",
+          "+234 802 345 6789",
+          "Milestone Approval",
+          sms,
+          wa
+        );
+
+        // Record notification in DB
+        supabase.from('notifications').insert([{
+          title: 'Milestone Verified: Bed Preparation',
+          message: 'Ido Agro Farm agronomist verified raised seed beds and drip lines for your Roma Tomatoes.',
+          type: 'ACTIVITY_VERIFIED',
+          recipient_phone: '+234 802 345 6789',
+          sms_message: sms,
+          whatsapp_message: wa
+        }]).then(() => {});
+
+        setTimeout(() => {
+          card.remove();
+          document.getElementById('queue-badge').innerText = "0";
+          showToast("✓ Activity Approved! Published to mobile timeline & WhatsApp alert sent.");
+        }, 400);
+      }
+    }
+
+    function rejectActivity(cardId) {
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.remove();
+        document.getElementById('queue-badge').innerText = "0";
+        showToast("Submission flagged. Operator notified to resubmit clear photo evidence.");
+      }
+    }
+
+    function dispatchRider(orderCardId, badgeId) {
+      const badge = document.getElementById(badgeId);
+      if (badge) {
+        badge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800";
+        badge.innerText = "Out for Delivery (Rider Kehinde En Route)";
+
+        const sms = "[MyFarm] Rider Kehinde Alao (+234 802 345 6789) has picked up order MYF-MKT-2026-0891 on motorcycle OYO-291-LU. ETA: ~35 mins to 14 Oluyole Way, Bodija. Track live: https://myfarm.ng/delivery/MYF-MKT-2026-0891";
+        const wa = "🛵 *MyFarm Dispatch Alert — Rider On The Way!* 💨\n\nOrder *MYF-MKT-2026-0891* has departed the Ido collection hub.\n\n👤 *Rider:* Kehinde Alao\n📞 *Call Rider:* +234 802 345 6789\n🏍️ *Vehicle:* TVS HLX 150 (OYO-291-LU)\n⏱️ *Est. Arrival:* ~35 minutes\n📍 *Destination:* 14 Oluyole Way, Bodija (Zone 2)\n\nTap below to follow the live delivery progress on the map:\n👉 https://myfarm.ng/delivery/MYF-MKT-2026-0891";
+
+        showNotificationModal(
+          "Rider Dispatched & Buyer Alerted",
+          "Babatunde Adeleke",
+          "+234 802 345 6789",
+          "Doorstep Dispatch",
+          sms,
+          wa
+        );
+
+        // Record notification in DB
+        supabase.from('notifications').insert([{
+          title: 'Rider En Route (MYF-MKT-2026-0891)',
+          message: 'Kehinde Alao has departed with your produce crate. ETA ~35 mins.',
+          type: 'RIDER_DISPATCHED',
+          recipient_phone: '+234 802 345 6789',
+          sms_message: sms,
+          whatsapp_message: wa
+        }]).then(() => {});
+
+        showToast("🛵 Rider Kehinde Alao assigned! Dispatch SMS & WhatsApp sent to buyer.");
+      }
+    }
+
+    function confirmDelivered(orderCardId, badgeId) {
+      const badge = document.getElementById(badgeId);
+      if (badge) {
+        badge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
+        badge.innerText = "Delivered to Doorstep ✓";
+
+        const sms = "[MyFarm] Settlement Credited! ₦8,787 from order MYF-MKT-2026-0891 is now available in your Seller Wallet for instant NIP bank withdrawal.";
+        const wa = "💰 *MyFarm Settlement Alert — Funds Available!* 🌾\n\nYour fresh produce order *MYF-MKT-2026-0891* has been delivered to the customer in Bodija, Ibadan.\n\n💵 *Net Settlement Credited:* ₦8,787\n🏦 *Destination:* Seller Wallet\n\nYou can now execute an instant NIP transfer to your bank account anytime:\n👉 https://myfarm.ng/seller-wallet";
+
+        showNotificationModal(
+          "Delivery Confirmed & Settlement Credited",
+          "Babatunde Adeleke",
+          "+234 802 345 6789",
+          "Seller Settlement",
+          sms,
+          wa
+        );
+
+        showToast("✅ Delivery confirmed! ₦8,787 credited to Babatunde Adeleke's Seller Wallet.");
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('admin-toast');
+      t.innerText = msg;
+      t.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        t.classList.add('opacity-0', 'pointer-events-none');
+      }, 4000);
+    }
+  </script>
+</body>
+</html>

@@ -304,7 +304,7 @@ export default function UnifiedLandingScreen() {
           </View>
         </View>
 
-        {/* 3. THE MYFARM STORY (CONVERSATIONAL & HUMAN WITH LINE BREAKS) */}
+        {/* 3. THE MYFARM STORY (CONVERSATIONAL & HUMAN WITH ICONS) */}
         <View style={styles.storySection}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTagGreen}>
@@ -313,7 +313,7 @@ export default function UnifiedLandingScreen() {
             </View>
             <Text style={styles.sectionBigTitle}>We Noticed a Real Problem in Nigeria...</Text>
             <Text style={styles.sectionSubText}>
-              And we decided to build a simple, honest way to fix it for both city families and local farmers.
+              So we built a simple, honest way to fix it — connecting city families directly with hardworking local farmers.
             </Text>
           </View>
 
@@ -325,18 +325,32 @@ export default function UnifiedLandingScreen() {
               </View>
               <Text style={styles.storyColTitle}>The Struggle for People in the City</Text>
               
-              <Text style={styles.storyLineText}>
-                • You work hard all week and want your family to eat fresh, healthy food.
-              </Text>
-              <Text style={styles.storyLineText}>
-                • But you're busy at work, stuck in traffic, and have zero land to farm.
-              </Text>
-              <Text style={styles.storyLineText}>
-                • You cannot leave your job to clear bush under the hot sun.
-              </Text>
-              <Text style={styles.storyLineText}>
-                • At the market, food prices keep soaring, and you have no idea what chemicals were sprayed on the produce.
-              </Text>
+              <View style={styles.storyItemList}>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#DC2626" style={styles.storyItemIcon} />
+                  <Text style={styles.storyLineText}>
+                    You work hard all week and want your family to eat fresh, healthy food.
+                  </Text>
+                </View>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#DC2626" style={styles.storyItemIcon} />
+                  <Text style={styles.storyLineText}>
+                    You're busy at work, stuck in traffic, and have zero land to farm.
+                  </Text>
+                </View>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#DC2626" style={styles.storyItemIcon} />
+                  <Text style={styles.storyLineText}>
+                    You cannot leave your job to clear bush under the hot sun.
+                  </Text>
+                </View>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#DC2626" style={styles.storyItemIcon} />
+                  <Text style={styles.storyLineText}>
+                    At the market, food prices keep soaring, and you have no idea what chemicals were sprayed on the produce.
+                  </Text>
+                </View>
+              </View>
             </View>
 
             {/* 2. The Farmer Reality */}
@@ -346,18 +360,32 @@ export default function UnifiedLandingScreen() {
               </View>
               <Text style={styles.storyColTitle}>The Reality for Our Local Farmers</Text>
 
-              <Text style={styles.storyLineText}>
-                • In rural villages, skilled local farmers have good fertile land and know how to plant.
-              </Text>
-              <Text style={styles.storyLineText}>
-                • But they lack money to buy certified seeds, fertilizers, or solar water pumps.
-              </Text>
-              <Text style={styles.storyLineText}>
-                • Middlemen buy their hard harvest for peanuts, leaving the farmer empty-handed.
-              </Text>
-              <Text style={styles.storyLineText}>
-                • Good food spoils along the road because farmers have no direct link to buyers in the city.
-              </Text>
+              <View style={styles.storyItemList}>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#D97706" style={styles.storyItemIcon} />
+                  <Text style={styles.storyLineText}>
+                    In rural villages, skilled local farmers have good fertile land and know how to plant.
+                  </Text>
+                </View>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#D97706" style={styles.storyItemIcon} />
+                  <Text style={styles.storyLineText}>
+                    They lack money to buy certified seeds, fertilizers, or solar water pumps.
+                  </Text>
+                </View>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#D97706" style={styles.storyItemIcon} />
+                  <Text style={styles.storyLineText}>
+                    Middlemen buy their hard harvest for peanuts, leaving the farmer empty-handed.
+                  </Text>
+                </View>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#D97706" style={styles.storyItemIcon} />
+                  <Text style={styles.storyLineText}>
+                    Good food spoils along the road because farmers have no direct link to buyers in the city.
+                  </Text>
+                </View>
+              </View>
             </View>
 
             {/* 3. The MyFarm Solution */}
@@ -369,21 +397,38 @@ export default function UnifiedLandingScreen() {
                 The Solution: How MyFarm Connects Both
               </Text>
 
-              <Text style={[styles.storyLineText, { color: '#133E2B' }]}>
-                • <Text style={{ fontWeight: '700' }}>You sponsor the plot:</Text> You fund the seeds and inputs in 3 minutes online.
-              </Text>
-              <Text style={[styles.storyLineText, { color: '#133E2B' }]}>
-                • <Text style={{ fontWeight: '700' }}>A vetted farmer works:</Text> An experienced local farmer handles the daily soil prep, planting, and watering.
-              </Text>
-              <Text style={[styles.storyLineText, { color: '#133E2B' }]}>
-                • <Text style={{ fontWeight: '700' }}>You watch on WhatsApp:</Text> Receive real, time-stamped photo updates as crops grow.
-              </Text>
-              <Text style={[styles.storyLineText, { color: '#133E2B' }]}>
-                • <Text style={{ fontWeight: '700' }}>Eat fresh or cash out:</Text> Get fresh crates delivered to your kitchen door, or we sell it on the market and send cash straight to your bank account.
-              </Text>
-              <Text style={[styles.storyLineText, { color: '#15803d', fontWeight: '700', marginTop: 4 }]}>
-                ✓ Everyone wins: Your family eats clean, the farmer earns guaranteed income, and Nigeria feeds itself.
-              </Text>
+              <View style={styles.storyItemList}>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#16A34A" style={styles.storyItemIcon} />
+                  <Text style={[styles.storyLineText, { color: '#133E2B' }]}>
+                    <Text style={{ fontWeight: '700' }}>You sponsor the plot:</Text> You fund seeds and inputs in 3 minutes online.
+                  </Text>
+                </View>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#16A34A" style={styles.storyItemIcon} />
+                  <Text style={[styles.storyLineText, { color: '#133E2B' }]}>
+                    <Text style={{ fontWeight: '700' }}>A vetted farmer works:</Text> An experienced local farmer handles daily soil prep, planting, and watering.
+                  </Text>
+                </View>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#16A34A" style={styles.storyItemIcon} />
+                  <Text style={[styles.storyLineText, { color: '#133E2B' }]}>
+                    <Text style={{ fontWeight: '700' }}>You watch on WhatsApp:</Text> Receive real, time-stamped photo updates as crops grow.
+                  </Text>
+                </View>
+                <View style={styles.storyItemRow}>
+                  <CheckCircle size={15} color="#16A34A" style={styles.storyItemIcon} />
+                  <Text style={[styles.storyLineText, { color: '#133E2B' }]}>
+                    <Text style={{ fontWeight: '700' }}>Eat fresh or cash out:</Text> Get fresh crates delivered to your kitchen door, or we sell it on the market and send cash straight to your bank account.
+                  </Text>
+                </View>
+                <View style={[styles.storyItemRow, { marginTop: 4 }]}>
+                  <Sparkles size={15} color="#15803d" style={styles.storyItemIcon} />
+                  <Text style={[styles.storyLineText, { color: '#15803d', fontWeight: '700' }]}>
+                    Everyone wins: Your family eats clean, the farmer earns guaranteed income, and Nigeria feeds itself.
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -598,15 +643,24 @@ export default function UnifiedLandingScreen() {
                 </View>
               </View>
               <View style={styles.stepBulletsList}>
-                <Text style={styles.stepBulletItem}>
-                  • Choose Roma Tomatoes, Habanero Pepper, or Golden Sweet Corn.
-                </Text>
-                <Text style={styles.stepBulletItem}>
-                  • Select plot size: 50 sqm (Family plot), 100 sqm, or a quarter acre.
-                </Text>
-                <Text style={styles.stepBulletItem}>
-                  • See transparent setup costs, projected kg yield, and expected profit upfront.
-                </Text>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    Choose Roma Tomatoes, Habanero Pepper, or Golden Sweet Corn.
+                  </Text>
+                </View>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    Select plot size: 50 sqm (Family plot), 100 sqm, or a quarter acre.
+                  </Text>
+                </View>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    See transparent setup costs, projected kg yield, and expected profit upfront.
+                  </Text>
+                </View>
               </View>
             </View>
 
@@ -622,15 +676,24 @@ export default function UnifiedLandingScreen() {
                 </View>
               </View>
               <View style={styles.stepBulletsList}>
-                <Text style={styles.stepBulletItem}>
-                  • We assign a vetted, background-checked local farmer to your plot.
-                </Text>
-                <Text style={styles.stepBulletItem}>
-                  • They clear soil, plant certified seedlings, weed, and irrigate daily with solar pumps.
-                </Text>
-                <Text style={styles.stepBulletItem}>
-                  • Certified agronomists inspect crop health and soil nutrition every week.
-                </Text>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    We assign a vetted, background-checked local farmer to your plot.
+                  </Text>
+                </View>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    They clear soil, plant certified seedlings, weed, and irrigate daily with solar pumps.
+                  </Text>
+                </View>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    Certified agronomists inspect crop health and soil nutrition every week.
+                  </Text>
+                </View>
               </View>
             </View>
 
@@ -646,15 +709,24 @@ export default function UnifiedLandingScreen() {
                 </View>
               </View>
               <View style={styles.stepBulletsList}>
-                <Text style={styles.stepBulletItem}>
-                  • Receive verified photo updates and field logs directly on your WhatsApp.
-                </Text>
-                <Text style={styles.stepBulletItem}>
-                  • Follow germination, flowering, and fruit ripening in real time.
-                </Text>
-                <Text style={styles.stepBulletItem}>
-                  • Optional: Schedule a weekend farm visit anytime to walk your plot in person!
-                </Text>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    Receive verified photo updates and field logs directly on your WhatsApp.
+                  </Text>
+                </View>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    Follow germination, flowering, and fruit ripening in real time.
+                  </Text>
+                </View>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    Optional: Schedule a weekend farm visit anytime to walk your plot in person!
+                  </Text>
+                </View>
               </View>
             </View>
 
@@ -670,15 +742,24 @@ export default function UnifiedLandingScreen() {
                 </View>
               </View>
               <View style={styles.stepBulletsList}>
-                <Text style={styles.stepBulletItem}>
-                  • <Text style={{ fontWeight: '700' }}>Option A (Home Delivery):</Text> Freshly harvested crates delivered to your kitchen door.
-                </Text>
-                <Text style={styles.stepBulletItem}>
-                  • <Text style={{ fontWeight: '700' }}>Option B (Cash Out):</Text> We sell your produce at wholesale market value on your behalf.
-                </Text>
-                <Text style={styles.stepBulletItem}>
-                  • Cash profits are deposited directly into your Nigerian bank account via NIP transfer.
-                </Text>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    <Text style={{ fontWeight: '700' }}>Option A (Home Delivery):</Text> Freshly harvested crates delivered to your kitchen door.
+                  </Text>
+                </View>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    <Text style={{ fontWeight: '700' }}>Option B (Cash Out):</Text> We sell your produce at wholesale market value on your behalf.
+                  </Text>
+                </View>
+                <View style={styles.stepBulletRow}>
+                  <CheckCircle size={14} color="#16a34a" style={styles.stepBulletIcon} />
+                  <Text style={styles.stepBulletItem}>
+                    Cash profits are deposited directly into your Nigerian bank account via NIP transfer.
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
@@ -1431,11 +1512,23 @@ const styles = StyleSheet.create({
     color: '#0F172A',
     marginBottom: 10,
   },
+  storyItemList: {
+    gap: 9,
+  },
+  storyItemRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 9,
+  },
+  storyItemIcon: {
+    marginTop: 2,
+    flexShrink: 0,
+  },
   storyLineText: {
+    flex: 1,
     fontSize: 13.5,
     color: '#334155',
-    lineHeight: 21,
-    marginBottom: 6,
+    lineHeight: 20,
   },
   gatewaysSection: {
     maxWidth: 960,
@@ -1625,10 +1718,20 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   stepBulletsList: {
-    gap: 4,
-    paddingLeft: 4,
+    gap: 7,
+    marginTop: 4,
+  },
+  stepBulletRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 9,
+  },
+  stepBulletIcon: {
+    marginTop: 2.5,
+    flexShrink: 0,
   },
   stepBulletItem: {
+    flex: 1,
     fontSize: 13,
     color: '#475569',
     lineHeight: 19,

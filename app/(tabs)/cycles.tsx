@@ -154,6 +154,7 @@ export default function CyclesScreen() {
         >
           <Text
             style={[styles.tabText, activeTab === 'active' && styles.activeTabText]}
+            numberOfLines={1}
           >
             Active Farms (
             {orders.filter((o) => !['completed', 'cancelled'].includes(o.status)).length}
@@ -170,8 +171,9 @@ export default function CyclesScreen() {
               styles.tabText,
               activeTab === 'completed' && styles.activeTabText,
             ]}
+            numberOfLines={1}
           >
-            Completed Harvests (
+            Completed (
             {orders.filter((o) => ['completed', 'cancelled'].includes(o.status)).length}
             )
           </Text>

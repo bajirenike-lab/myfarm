@@ -812,6 +812,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.borderLight,
     paddingBottom: Spacing.xs,
+    flexWrap: 'wrap',
+    gap: Spacing.xs,
   },
   cardHeaderLeft: {
     flexDirection: 'row',

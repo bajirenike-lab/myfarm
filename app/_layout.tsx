@@ -17,6 +17,9 @@ export default function RootLayout() {
           html, body {
             height: 100% !important;
             height: 100dvh !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            overflow-x: hidden !important;
             margin: 0;
             padding: 0;
             -webkit-text-size-adjust: 100%;
@@ -26,11 +29,20 @@ export default function RootLayout() {
             height: 100% !important;
             height: 100dvh !important;
             max-height: 100dvh !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            overflow-x: hidden !important;
+          }
+          /* Prevent any horizontal layout shifting or white blank space on sides */
+          * {
+            box-sizing: border-box;
           }
           /* Ensure footer navigation buttons and text are elevated and visible */
           [role="tablist"] {
             padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)) !important;
             box-sizing: border-box !important;
+            width: 100% !important;
+            max-width: 100vw !important;
           }
           [role="tab"] {
             overflow: visible !important;

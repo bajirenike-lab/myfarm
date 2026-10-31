@@ -131,43 +131,49 @@ export default function NotificationsScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Filter Chips */}
-      <View style={styles.filterBar}>
-        <TouchableOpacity
-          style={[styles.filterChip, filter === 'all' && styles.filterChipActive]}
-          onPress={() => setFilter('all')}
+      {/* Filter Chips - Horizontally Scrollable on Mobile to prevent page shifting */}
+      <View style={styles.filterBarContainer}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filterBarScroll}
         >
-          <Text style={[styles.filterChipText, filter === 'all' && styles.filterChipTextActive]}>
-            All ({notifications.length})
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterChip, filter === 'all' && styles.filterChipActive]}
+            onPress={() => setFilter('all')}
+          >
+            <Text style={[styles.filterChipText, filter === 'all' && styles.filterChipTextActive]}>
+              All ({notifications.length})
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.filterChip, filter === 'alerts' && styles.filterChipActive]}
-          onPress={() => setFilter('alerts')}
-        >
-          <Text style={[styles.filterChipText, filter === 'alerts' && styles.filterChipTextActive]}>
-            SMS & WhatsApp
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterChip, filter === 'alerts' && styles.filterChipActive]}
+            onPress={() => setFilter('alerts')}
+          >
+            <Text style={[styles.filterChipText, filter === 'alerts' && styles.filterChipTextActive]}>
+              SMS & WhatsApp
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.filterChip, filter === 'orders' && styles.filterChipActive]}
-          onPress={() => setFilter('orders')}
-        >
-          <Text style={[styles.filterChipText, filter === 'orders' && styles.filterChipTextActive]}>
-            Orders & Delivery
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterChip, filter === 'orders' && styles.filterChipActive]}
+            onPress={() => setFilter('orders')}
+          >
+            <Text style={[styles.filterChipText, filter === 'orders' && styles.filterChipTextActive]}>
+              Orders & Delivery
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.filterChip, filter === 'farm' && styles.filterChipActive]}
-          onPress={() => setFilter('farm')}
-        >
-          <Text style={[styles.filterChipText, filter === 'farm' && styles.filterChipTextActive]}>
-            Farm Milestones
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterChip, filter === 'farm' && styles.filterChipActive]}
+            onPress={() => setFilter('farm')}
+          >
+            <Text style={[styles.filterChipText, filter === 'farm' && styles.filterChipTextActive]}>
+              Farm Milestones
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
 
       {/* Notifications List */}
@@ -335,6 +341,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+    width: '100%',
+    maxWidth: '100%',
+    overflow: 'hidden',
   },
   header: {
     flexDirection: 'row',
@@ -346,6 +355,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
+    width: '100%',
   },
   backButton: {
     padding: Spacing.xs,
@@ -364,31 +374,39 @@ const styles = StyleSheet.create({
   markReadButton: {
     padding: Spacing.xs,
   },
-  filterBar: {
+  filterBarContainer: {
+    backgroundColor: Colors.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+    width: '100%',
+    flexGrow: 0,
+  },
+  filterBarScroll: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.surface,
     gap: Spacing.xs,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    alignItems: 'center',
   },
   filterChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
     borderRadius: BorderRadius.full,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.surfaceSubtle,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   filterChipActive: {
     backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
   },
   filterChipText: {
-    ...Typography.caption,
+    fontSize: 12,
     fontWeight: '600',
     color: Colors.text.secondary,
   },
   filterChipTextActive: {
-    color: Colors.surface,
+    color: Colors.text.inverse,
     fontWeight: '700',
   },
   listContent: {

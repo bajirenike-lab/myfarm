@@ -3,7 +3,7 @@
 # ==============================================================================
 
 [build]
-  command = "npx expo export --platform web"
+  command = "npm run build:web"
   publish = "dist"
 
 [build.environment]
